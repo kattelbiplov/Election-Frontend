@@ -1,0 +1,229 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Brand */
+  --color-brand: #e80020;
+  --color-brand-dark: #a50017;
+  --color-brand-hover: #c9001c;
+  --color-brand-light: #fff0f2;
+
+  /* Surfaces */
+  --color-sidebar: #171717;
+  --color-sidebar-hover: #262626;
+  --color-sidebar-active: #2a2a2a;
+  --color-bg: #f8f8f8;
+  --color-card: #ffffff;
+
+  /* Text */
+  --color-text: #18181b;
+  --color-text-secondary: #71717a;
+  --color-text-muted: #a1a1aa;
+  --color-text-inverse: #ffffff;
+
+  /* Borders */
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
+
+  /* Status */
+  --color-success: #15803d;
+  --color-success-bg: #f0fdf4;
+  --color-warning: #b45309;
+  --color-warning-bg: #fffbeb;
+  --color-danger: #e80020;
+  --color-danger-bg: #fff0f2;
+  --color-info: #1d4ed8;
+  --color-info-bg: #eff6ff;
+  --color-neutral: #52525b;
+  --color-neutral-bg: #f4f4f5;
+
+  /* Type */
+  --font-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-nepali: 'Hind', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px 0 rgb(24 24 27 / 0.04), 0 1px 3px 0 rgb(24 24 27 / 0.06);
+  --shadow-elevated: 0 4px 12px -2px rgb(24 24 27 / 0.08), 0 2px 4px -2px rgb(24 24 27 / 0.04);
+  --shadow-popover: 0 12px 32px -4px rgb(24 24 27 / 0.14), 0 4px 10px -4px rgb(24 24 27 / 0.08);
+
+  /* Layout */
+  --width-sidebar: 264px;
+  --width-sidebar-rail: 76px;
+
+  --breakpoint-xs: 400px;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  [lang='ne'],
+  .font-nepali {
+    font-family: var(--font-nepali);
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font-family: inherit;
+  }
+
+  ::selection {
+    background: var(--color-brand-light);
+    color: var(--color-brand-dark);
+  }
+
+  /* Slim, unobtrusive scrollbars for dense admin tables */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation: toast-in 0.18s ease-out;
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+}
+
+/* Family tree (Module 09, src/features/households/FamilyTreeView.tsx) — the classic pure-CSS
+   org-chart technique: each generation is a <ul>, each person an <li>, connector lines drawn with
+   ::before/::after borders rather than SVG/canvas. Scoped under .family-tree so it can't leak into
+   any other nested-list markup elsewhere in the app. */
+.family-tree,
+.family-tree ul {
+  display: flex;
+  padding-top: 20px;
+  position: relative;
+  list-style: none;
+  margin: 0;
+}
+
+.family-tree {
+  padding-top: 0;
+  justify-content: center;
+}
+
+.family-tree li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px 0;
+  position: relative;
+}
+
+.family-tree li::before,
+.family-tree li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 20px;
+  border-top: 2px solid var(--color-border-strong);
+}
+
+.family-tree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 2px solid var(--color-border-strong);
+}
+
+.family-tree li:only-child::after,
+.family-tree li:only-child::before {
+  display: none;
+}
+
+.family-tree li:only-child {
+  padding-top: 0;
+}
+
+.family-tree li:first-child::before,
+.family-tree li:last-child::after {
+  border: 0 none;
+}
+
+.family-tree li:last-child::before {
+  border-right: 2px solid var(--color-border-strong);
+  border-radius: 0 6px 0 0;
+}
+
+.family-tree li:first-child::after {
+  border-radius: 6px 0 0 0;
+}
+
+.family-tree ul::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 2px solid var(--color-border-strong);
+  width: 0;
+  height: 20px;
+}
